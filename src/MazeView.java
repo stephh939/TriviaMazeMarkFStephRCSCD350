@@ -1,33 +1,20 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 // This is where we make everything that is show
 // Here we don't care about the data
 
-public class MazeView  extends Application {
+public class MazeView extends BorderPane {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    private Maze maze;
 
-        primaryStage.getIcons().add(new Image("ApplicationImage.PNG"));
-        primaryStage.setTitle("Trivia Maze");
-        BorderPane root = new BorderPane();
-
+    public MazeView() {
         MenuBar menuBar = createMenuBar();
-        Maze maze = new Maze(4, 4);
+        maze = new Maze(4, 4);
         ToolBar toolBar = createToolBar();
-
-        root.setTop(menuBar);
-        root.setCenter(maze);
-        root.setBottom(toolBar);
-
-        //primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 800, 800));
-        primaryStage.show();
+        setTop(menuBar);
+        setCenter(maze);
+        setBottom(toolBar);
     }
 
     private MenuBar createMenuBar() {
@@ -83,5 +70,21 @@ public class MazeView  extends Application {
         toolBar.getItems().addAll(score, fix, tnt);
 
         return toolBar;
+    }
+
+    public void moveRight() {
+        maze.moveRight();
+    }
+
+    public void moveLeft() {
+        maze.moveLeft();
+    }
+
+    public void moveDown() {
+        maze.moveDown();
+    }
+
+    public void moveUp() {
+        maze.moveUp();
     }
 }
