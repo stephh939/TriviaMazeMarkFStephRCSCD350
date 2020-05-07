@@ -10,7 +10,7 @@ public class MazeView extends BorderPane {
 
     public MazeView() {
         MenuBar menuBar = createMenuBar();
-        maze = new Maze(4, 4);
+        maze = new Maze(5, 5);
         ToolBar toolBar = createToolBar();
         setTop(menuBar);
         setCenter(maze);
