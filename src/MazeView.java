@@ -87,4 +87,5 @@ public class MazeView extends BorderPane {
     public void moveUp() {
         maze.moveUp();
     }
+
 }

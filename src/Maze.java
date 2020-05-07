@@ -64,11 +64,11 @@ public class Maze extends GridPane {
     protected void sealDoor(int x, int y) {
         ImageView lockedDoor = images[x][y];
         if (lockedDoor.getUserData().equals("vert")) {
-            lockedDoor.setImage(new Image("Images/sealedVert"));
+            lockedDoor.setImage(new Image("Images/sealedVert.jpg"));
             lockedDoor.setUserData("sealed");
         }
         else if (lockedDoor.getUserData().equals("horiz")) {
-            lockedDoor.setImage(new Image("Images/sealedHoriz"));
+            lockedDoor.setImage(new Image("Images/sealedHoriz.jpg"));
             lockedDoor.setUserData("sealed");
         }
         else {

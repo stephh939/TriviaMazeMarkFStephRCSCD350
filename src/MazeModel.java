@@ -6,12 +6,8 @@
 */
 
 
-import java.util.ArrayList;
-
 public class MazeModel {
 
-    private int sealedDoors;
-    private int openedDoors;
-    private ArrayList<ArrayList<Double>> mazeArray;
+
 
 }
