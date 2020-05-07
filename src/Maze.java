@@ -17,6 +17,8 @@ public class Maze extends GridPane {
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         character = new ImageView(new Image("Images/character.png"));
+        getChildren().set(0, character);
+
     }
 
     protected void createBoard(int width, int height) {
@@ -27,7 +29,7 @@ public class Maze extends GridPane {
             for (int rows = 0; rows < columnsAmount; rows += 2) {
                 ImageView blank = new ImageView(new Image("Images/blank.png"));
                 blank.setUserData("BLANK");
-                this.add(blank, column, rows, 1,1);
+                add(blank, column, rows, 1,1);
             }
         }
 
@@ -35,14 +37,15 @@ public class Maze extends GridPane {
         for (int column = 0; column < columnsAmount; column += 2) {
             for (int rows = 1; rows < rowsAmount; rows += 2) {
                 ImageView spacer = new ImageView(new Image("Images/horiz.png"));
-                this.add(spacer, column, rows, 1,1);
+                add(spacer, column, rows, 1,1);
             }
         }
+
         // add dividers vertically
         for (int column = 1; column < rowsAmount; column += 2) {
             for (int rows = 0; rows < columnsAmount; rows += 2) {
                 ImageView spacer = new ImageView(new Image("Images/vert.png"));
-                this.add(spacer, column, rows, 1,1);
+                add(spacer, column, rows, 1,1);
             }
         }
     }

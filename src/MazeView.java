@@ -18,15 +18,15 @@ public class MazeView  extends Application {
         BorderPane root = new BorderPane();
 
         MenuBar menuBar = createMenuBar();
-        Maze maze = new Maze(4,4);
+        Maze maze = new Maze(4, 4);
         ToolBar toolBar = createToolBar();
 
         root.setTop(menuBar);
         root.setCenter(maze);
         root.setBottom(toolBar);
 
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 800, 500));
+        //primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(root, 800, 800));
         primaryStage.show();
     }
 
