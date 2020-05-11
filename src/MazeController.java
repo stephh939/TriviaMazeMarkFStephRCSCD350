@@ -30,16 +30,16 @@ public class MazeController {
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()){
             case UP :
-                view.moveUp();
+                view.getMaze().moveUp();
                 break;
             case DOWN :
-                view.moveDown();
+                view.getMaze().moveDown();
                 break;
             case RIGHT :
-                view.moveRight();
+                view.getMaze().moveRight();
                 break;
             case LEFT :
-                view.moveLeft();
+                view.getMaze().moveLeft();
                 break;
         }
     }

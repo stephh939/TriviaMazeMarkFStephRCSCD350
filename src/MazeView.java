@@ -72,20 +72,8 @@ public class MazeView extends BorderPane {
         return toolBar;
     }
 
-    public void moveRight() {
-        maze.moveRight();
-    }
-
-    public void moveLeft() {
-        maze.moveLeft();
-    }
-
-    public void moveDown() {
-        maze.moveDown();
-    }
-
-    public void moveUp() {
-        maze.moveUp();
+    protected Maze getMaze() {
+        return maze;
     }
 
 }

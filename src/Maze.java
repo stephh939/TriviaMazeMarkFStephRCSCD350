@@ -1,5 +1,8 @@
+import DialogBoxes.ErrorDialog;
+import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -27,7 +30,7 @@ public class Maze extends GridPane {
         for (int column = 0; column < columnsAmount; column += 2) {
             for (int rows = 0; rows < columnsAmount; rows += 2) {
                 ImageView blank = new ImageView(new Image("Images/blank.png"));
-                blank.setUserData("BLANK");
+                blank.setUserData("room");
                 add(blank, column, rows, 1,1);
                 images[column][rows] = blank;
             }
@@ -37,7 +40,7 @@ public class Maze extends GridPane {
         for (int column = 0; column < columnsAmount; column += 2) {
             for (int rows = 1; rows < rowsAmount; rows += 2) {
                 ImageView spacer = new ImageView(new Image("Images/horiz.png"));
-                spacer.setUserData("horiz");
+                spacer.setUserData("horizLocked");
                 add(spacer, column, rows, 1,1);
                 images[column][rows] = spacer;
             }
@@ -47,7 +50,7 @@ public class Maze extends GridPane {
         for (int column = 1; column < rowsAmount; column += 2) {
             for (int rows = 0; rows < columnsAmount; rows += 2) {
                 ImageView spacer = new ImageView(new Image("Images/vert.png"));
-                spacer.setUserData("vert");
+                spacer.setUserData("vertLocked");
                 add(spacer, column, rows, 1,1);
                 images[column][rows] = spacer;
             }
@@ -63,11 +66,11 @@ public class Maze extends GridPane {
 
     protected void sealDoor(int x, int y) {
         ImageView lockedDoor = images[x][y];
-        if (lockedDoor.getUserData().equals("vert")) {
+        if (lockedDoor.getUserData().equals("vertLocked")) {
             lockedDoor.setImage(new Image("Images/sealedVert.jpg"));
             lockedDoor.setUserData("sealed");
         }
-        else if (lockedDoor.getUserData().equals("horiz")) {
+        else if (lockedDoor.getUserData().equals("horizLocked")) {
             lockedDoor.setImage(new Image("Images/sealedHoriz.jpg"));
             lockedDoor.setUserData("sealed");
         }
@@ -78,6 +81,7 @@ public class Maze extends GridPane {
 
     protected void moveRight() {
         if (xLoc + 2 < (images[xLoc].length)) {
+            showQuestionBox(xLoc + 1, yLoc);
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
             images[xLoc + 2][yLoc].setImage(new Image("Images/character.png"));
             xLoc += 2;
@@ -86,6 +90,7 @@ public class Maze extends GridPane {
 
     protected void moveLeft() {
         if (xLoc - 2 > -1) {
+            showQuestionBox(xLoc - 1, yLoc);
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
             images[xLoc - 2][yLoc].setImage(new Image("Images/character.png"));
             xLoc -= 2;
@@ -94,6 +99,7 @@ public class Maze extends GridPane {
 
     protected void moveDown() {
         if (yLoc + 2 < (images[yLoc].length)) {
+            showQuestionBox(xLoc, yLoc + 1);
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
             images[xLoc][yLoc + 2].setImage(new Image("Images/character.png"));
             yLoc += 2;
@@ -101,11 +107,23 @@ public class Maze extends GridPane {
     }
 
     protected void moveUp() {
-        if (yLoc - 2 > -1) {
+        if (yLoc - 2 > -1 ) {
+            showQuestionBox(xLoc, yLoc - 1);
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
             images[xLoc][yLoc - 2].setImage(new Image("Images/character.png"));
             yLoc -= 2;
         }
     }
 
+    public void showQuestionBox(int x, int y) {
+        ImageView wall = images[x][y];
+        if (wall.getUserData().equals("vertLocked") || wall.getUserData().equals("horizLocked")) {
+            InputDialog question = new InputDialog("This is where the question goes");
+            question.showAndWait();
+        }
+        else if (wall.getUserData().equals("sealed")) {
+            ErrorDialog sealed = new ErrorDialog("This door is sealed");
+            sealed.showAndWait();
+        }
+    }
 }
