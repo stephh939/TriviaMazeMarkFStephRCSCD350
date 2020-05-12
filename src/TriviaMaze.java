@@ -1,10 +1,11 @@
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class TriviaMaze extends Application {
 
     public static void main(String[] args) {
-        launch(args);
+    		launch(args);
     }
 
     @Override
@@ -12,6 +13,9 @@ public class TriviaMaze extends Application {
         MazeController controller = new MazeController();
         controller.buildView(primaryStage);
     }
+    
+  
+    
 
 }
 
