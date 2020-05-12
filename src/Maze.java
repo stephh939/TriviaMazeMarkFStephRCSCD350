@@ -2,7 +2,6 @@ import DialogBoxes.ErrorDialog;
 import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -15,8 +14,10 @@ public class Maze extends GridPane {
 
     private ImageView [][] images;
     protected int xLoc, yLoc;
+    private String character;
 
     public Maze(int width, int height) {
+        character = "Android";
         createBoard(width, height);
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -57,7 +58,7 @@ public class Maze extends GridPane {
         }
 
         ImageView character = images[0][0];
-        character.setImage(new Image("Images/character.png"));
+        character.setImage(new Image("Images/" + this.character + ".png"));
         xLoc = 0; yLoc = 0;
 
         ImageView exit = images[columnsAmount-2][rowsAmount];
@@ -79,51 +80,141 @@ public class Maze extends GridPane {
         }
     }
 
-    protected void moveRight() {
-        if (xLoc + 2 < (images[xLoc].length)) {
-            showQuestionBox(xLoc + 1, yLoc);
+    protected void moveRight(boolean correctAnswer) {
+        if (correctAnswer) {
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
-            images[xLoc + 2][yLoc].setImage(new Image("Images/character.png"));
+            images[xLoc + 2][yLoc].setImage(new Image("Images/" + character + ".png"));
             xLoc += 2;
         }
     }
 
-    protected void moveLeft() {
-        if (xLoc - 2 > -1) {
-            showQuestionBox(xLoc - 1, yLoc);
+    protected void moveLeft(boolean correctAnswer) {
+        if (correctAnswer) {
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
-            images[xLoc - 2][yLoc].setImage(new Image("Images/character.png"));
+            images[xLoc - 2][yLoc].setImage(new Image("Images/" + character + ".png"));
             xLoc -= 2;
         }
     }
 
-    protected void moveDown() {
-        if (yLoc + 2 < (images[yLoc].length)) {
-            showQuestionBox(xLoc, yLoc + 1);
+    protected void moveDown(boolean correctAnswer) {
+        if (correctAnswer) {
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
-            images[xLoc][yLoc + 2].setImage(new Image("Images/character.png"));
+            images[xLoc][yLoc + 2].setImage(new Image("Images/" + character + ".png"));
             yLoc += 2;
         }
     }
 
-    protected void moveUp() {
-        if (yLoc - 2 > -1 ) {
-            showQuestionBox(xLoc, yLoc - 1);
+    protected void moveUp(boolean correctAnswer) {
+        if (correctAnswer) {
             images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
-            images[xLoc][yLoc - 2].setImage(new Image("Images/character.png"));
+            images[xLoc][yLoc - 2].setImage(new Image("Images/" + character + ".png"));
             yLoc -= 2;
         }
     }
 
-    public void showQuestionBox(int x, int y) {
-        ImageView wall = images[x][y];
-        if (wall.getUserData().equals("vertLocked") || wall.getUserData().equals("horizLocked")) {
-            InputDialog question = new InputDialog("This is where the question goes");
-            question.showAndWait();
+    public String showWallDialog() {
+        InputDialog question = new InputDialog("This is where the question goes");
+        return question.getAnswer();
+    }
+
+    public boolean canMoveUp() {
+        if (yLoc - 2 > -1) {
+            ImageView wall = images[xLoc][yLoc - 1];
+            if (wall.getUserData().equals("sealed")) {
+                ErrorDialog message = new ErrorDialog("This door is sealed");
+                message.showAndWait();
+                return false;
+            }
+            return true;
         }
-        else if (wall.getUserData().equals("sealed")) {
-            ErrorDialog sealed = new ErrorDialog("This door is sealed");
-            sealed.showAndWait();
+        return false;
+    }
+
+    public boolean canMoveDown() {
+        if (yLoc + 2 < images.length) {
+            ImageView wall = images[xLoc][yLoc + 1];
+            if (wall.getUserData().equals("sealed")) {
+                ErrorDialog message = new ErrorDialog("This door is sealed");
+                message.showAndWait();
+                return false;
+            }
+            return true;
         }
+        return false;
+    }
+
+    public boolean canMoveRight() {
+        if (xLoc + 2 < images.length) {
+            ImageView wall = images[xLoc + 1][yLoc];
+            if (wall.getUserData().equals("sealed")) {
+                ErrorDialog message = new ErrorDialog("This door is sealed");
+                message.showAndWait();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canMoveLeft() {
+        if (xLoc - 2 > -1) {
+            ImageView wall = images[xLoc - 1][yLoc];
+            if (wall.getUserData().equals("sealed")) {
+                ErrorDialog message = new ErrorDialog("This door is sealed");
+                message.showAndWait();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean upDoorUnlocked() {
+        if (yLoc - 2 > -1) {
+            ImageView wall = images[xLoc][yLoc - 1];
+            if (wall.getUserData().equals("unlocked")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean downDoorUnlocked() {
+        if (yLoc + 2 < images.length) {
+            ImageView wall = images[xLoc][yLoc + 1];
+            if (wall.getUserData().equals("unlocked")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean rightDoorUnlocked() {
+        if (xLoc + 2 < images.length) {
+            ImageView wall = images[xLoc + 1][yLoc];
+            if (wall.getUserData().equals("unlocked")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean leftDoorUnlocked() {
+        if (xLoc - 2 > -1) {
+            ImageView wall = images[xLoc - 1][yLoc];
+            if (wall.getUserData().equals("unlocked")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setWallToUnlocked(int x, int y) {
+        images[x][y].setUserData("unlocked");
+    }
+
+    public void changeGameCharacter(String character) {
+        this.character = character;
+        images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
     }
 }
