@@ -1,11 +1,6 @@
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.CallableStatement;
+import java.sql.*;
+import javax.swing.*;
 import java.util.*;
 import java.lang.String;
 
@@ -20,19 +15,18 @@ import java.lang.String;
 
 public class MazeModel {
 
-	private Connection conn = null; 
+	private static Connection conn = null; 
 	private Statement statement = null; 
 	private ResultSet resultSet = null; 
 	
 	public MazeModel() {
-		
+		//constructor stuff
 	}
 	
 	
-	public MazeModel(Connection c)throws SQLException{
-		conn = c; 
-		statement = conn.createStatement();
-	}
+	
+	
+
 	
 	public void findQuestions()throws IOException, SQLException{
 		
@@ -52,6 +46,7 @@ public class MazeModel {
 		
 		while(resultSet.next()) {
 			String question = resultSet.getString(1);
+			System.out.println(question);
 		}
 		System.out.println();
 	}
