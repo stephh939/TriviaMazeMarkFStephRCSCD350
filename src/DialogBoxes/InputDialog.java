@@ -1,10 +1,10 @@
 package DialogBoxes;
-
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
 
 public class InputDialog extends TextInputDialog {
 
+	
     public InputDialog(String header) {
         setHeaderText(header);
     }

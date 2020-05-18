@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -12,7 +15,10 @@ public class MazeController {
     private MazeView view;
 
     public MazeController() {
-        model = new MazeModel();
+    	ArrayList<String> Q = model.getQuestion();
+    	ArrayList<String> A = model.getAnswer();
+    	ArrayList<String> I = model.getID();
+        model = new MazeModel(Q,A,I);
     }
 
     public void buildView(Stage primaryStage) {

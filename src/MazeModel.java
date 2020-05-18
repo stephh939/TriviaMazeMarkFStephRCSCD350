@@ -15,50 +15,103 @@ import java.lang.String;
 
 public class MazeModel {
 
-	private static Connection conn = null; 
-	private Statement statement = null; 
-	private ResultSet resultSet = null; 
+	private int correct; 
+	private int incorrect;
+	private static ArrayList<String> Question = new ArrayList<String>();
+	private static ArrayList<String> Answer = new ArrayList<String>();
+	private static ArrayList<String> ID = new ArrayList<String>();
 	
-	public MazeModel() {
-		//constructor stuff
+	public MazeModel(ArrayList<String> Q, ArrayList<String> A, ArrayList<String> I) {
+		this.setQuestion(Q);
+		this.setAnswer(A);
+		this.setID(I);
 	}
-	
-	
-	
 	
 
-	
-	public void findQuestions()throws IOException, SQLException{
+	public void interact() {
+		Random r = new Random();
+		int random = r.nextInt(40);
+		Scanner kb = new Scanner(System.in);
+		int c = this.getCorrect();
+		int i = this.getIncorrect();
+		int y = 0;
 		
-		String query = "SELECT QuestionOptions.Question_ID, QuestionOptions.Question_Choice, QuestionAnswers.Answer\r\n" + 
-				"from QuestionOptions, QuestionAnswers\r\n" + 
-				"Where QuestionOptions.Question_ID = QuestionAnswers.Question_ID\r\n" + 
-				"Order By QuestionOptions.Question_ID asc";
-		
-		resultSet = statement.executeQuery(query);
-		
-	}
-	
-	public void printQuestions() throws IOException, SQLException{
-		System.out.println("****** Query 0 ******");
-		System.out.println(); 
-		System.out.println("Question");
-		
-		while(resultSet.next()) {
-			String question = resultSet.getString(1);
-			System.out.println(question);
+		while(!this.getQuestion().isEmpty() && y < this.getQuestion().size()) {
+			System.out.println("ID Numer: " + this.getID().get(random) + ". " + this.getQuestion().get(random));
+			String answer = kb.next();
+			String a = answer.toLowerCase();
+			 
+			for(int x = 0; x < this.getAnswer().size(); x++) {
+				if(this.getAnswer().get(random) != " " && a.compareTo(this.getAnswer().get(x)) == 0) {
+					System.out.println("Correct, Opening Door");
+					this.getID().remove(x);
+					this.getID().add(x, " ");
+					this.getQuestion().remove(x);
+					this.getQuestion().add(x, " ");
+					this.getAnswer().remove(x);
+					this.getAnswer().add(x, " ");
+					c++;
+					setCorrect(c);
+					return;
+				}
+			}
+			
+			if(c == 0) {
+				i++;
+				System.out.println("Incorrect, Sealing Door");
+				setIncorrect(i);
+				return;
+			}
+			
+			y++;
 		}
-		System.out.println();
+	}
+
+	
+	
+	
+	
+	
+	public static ArrayList<String> getQuestion() {
+		return Question;
+	}
+
+	public void setQuestion(ArrayList<String> question) {
+		Question = question;
+	}
+
+	public static ArrayList<String> getAnswer() {
+		return Answer;
+	}
+
+	public void setAnswer(ArrayList<String> answer) {
+		Answer = answer;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static ArrayList<String> getID() {
+		return ID;
+	}
+
+	public void setID(ArrayList<String> iD) {
+		ID = iD;
+	}
+
+	public int getCorrect() {
+		return correct;
+	}
+
+	public void setCorrect(int correct) {
+		this.correct = correct;
+	}
+
+	public int getIncorrect() {
+		return incorrect;
+	}
+
+	public void setIncorrect(int incorrect) {
+		this.incorrect = incorrect;
+	}
+
 	
 
 }
