@@ -28,6 +28,7 @@ public class MazeModel {
 	}
 	
 
+	/*
 	public void interact() {
 		Random r = new Random();
 		int random = r.nextInt(40);
@@ -67,7 +68,7 @@ public class MazeModel {
 		}
 	}
 
-	
+	*/
 	
 	
 	

@@ -16,17 +16,17 @@ public class MazeConnection {
 	
 	   
 	public MazeConnection(Connection c)throws SQLException{
-	       conn = c;
-	       statement = conn.createStatement();
+	       setConn(c);
 	   }
 		
 	public void findAll()throws SQLException{
-		   String query = "select  questions.ID, question, Answer\n" +
-	               "from questions, answers\n" +
-	               "where questions.ID = answers.ID\n" +
-	               "ORDER BY questions.ID asc";
-		   
-		   resultSet = statement.executeQuery(query);
+		   String query = "select Questions.ID, Questions.Question, Answers.Answer\r\n" + 
+		   		"from Questions, Answers\r\n" + 
+		   		"where Questions.ID = Answers.ID\r\n" + 
+		   		"order by Questions.ID asc";
+			   
+			   statement = conn.createStatement();
+			   resultSet = statement.executeQuery(query);
 		   
 	   }
 	   
