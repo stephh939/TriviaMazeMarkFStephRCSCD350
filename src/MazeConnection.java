@@ -1,5 +1,3 @@
-import javafx.collections.ObservableList;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +7,8 @@ import java.util.ArrayList;
 //all of the IDs, Questions and Answers in the database
 
 public class MazeConnection {
-	
+
+
 	private Connection conn = null;
 	private Statement statement = null;
 	private ResultSet resultSet = null;
@@ -19,24 +18,7 @@ public class MazeConnection {
 	public MazeConnection(Connection c)throws SQLException{
 	       setConn(c);
 	   }
-
-	public void fillTable(QuestionsTable table) throws SQLException {
-		String query = "select Questions.ID, Questions.Question, Answers.Answer\r\n" +
-				"from Questions, Answers\r\n" +
-				"where Questions.ID = Answers.ID\r\n" +
-				"order by Questions.ID asc";
-
-		statement = conn.createStatement();
-		resultSet = statement.executeQuery(query);
-
-		while (resultSet.next()) {
-			String ID = resultSet.getString(1);
-			String question = resultSet.getString(2);
-			String answer = resultSet.getString(3);
-			table.getItems().add(new Question(question, answer, ID));
-		}
-	}
-
+		
 	public void findAll()throws SQLException{
 		   String query = "select Questions.ID, Questions.Question, Answers.Answer\r\n" + 
 		   		"from Questions, Answers\r\n" + 
