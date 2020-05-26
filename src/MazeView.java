@@ -1,5 +1,8 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -13,11 +16,12 @@ public class MazeView extends BorderPane {
     private Maze maze;
     private File currentFile;
     private Stage stage;
+    public Button fix, tnt, admin;
 
     public MazeView(Stage primaryStage) {
         MenuBar menuBar = createMenuBar();
         maze = new Maze(5, 5);
-        ToolBar toolBar = createToolBar();
+        HBox toolBar = createToolBar();
         setTop(menuBar);
         setCenter(maze);
         setBottom(toolBar);
@@ -29,8 +33,7 @@ public class MazeView extends BorderPane {
 
         menuBar.getMenus().addAll(
                 createFileMenu(),
-                createOptionsMenu(),
-                createAdminMenu()
+                createOptionsMenu()
         );
 
         return menuBar;
@@ -124,25 +127,22 @@ public class MazeView extends BorderPane {
         return optionMenu;
     }
 
-    private Menu createAdminMenu() {
-        Menu admin = new Menu("Admin");
-        admin.setOnAction(event -> onAdmin());
-        return admin;
-    }
+    private HBox createToolBar() {
+        fix = new Button("Fix");
+        fix.setPadding(new Insets(8,16,8,16));
+        tnt = new Button("TNT");
+        tnt.setPadding(new Insets(8,16,8,16));
+        HBox helperButtons = new HBox();
+        helperButtons.setMargin(fix, new Insets(0,0,0,600));
+        helperButtons.setSpacing(8);
+        helperButtons.getChildren().addAll(fix, tnt);
 
-    private void onAdmin() {
+        admin = new Button("Admin");
+        admin.setPadding(new Insets(8,16,8,16));
 
-    }
-
-    private ToolBar createToolBar() {
-        ToolBar toolBar = new ToolBar();
-
-        Label score = new Label("Unlocked doors: 4    Sealed doors: 2");
-
-        Button fix = new Button("Fix");
-        Button tnt = new Button("TNT");
-
-        toolBar.getItems().addAll(score, fix, tnt);
+        HBox toolBar = new HBox(admin, helperButtons);
+        toolBar.setSpacing(8);
+        toolBar.setPadding(new Insets(8));
 
         return toolBar;
     }

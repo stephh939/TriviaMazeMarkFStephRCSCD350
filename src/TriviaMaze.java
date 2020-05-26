@@ -1,13 +1,10 @@
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.*;
 import java.util.ArrayList;
-
 import org.sqlite.SQLiteDataSource;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -24,10 +21,8 @@ public class TriviaMaze extends Application {
     		e.printStackTrace();
     		System.exit(0);
     	}
-    	
-    	
+
     	try {
-    		
 			Connection conn = ds.getConnection();
 			MazeConnection myquery = new MazeConnection(conn);
 			ArrayList<String> A = new ArrayList<String>(); 
@@ -40,27 +35,19 @@ public class TriviaMaze extends Application {
 			Q = myquery.findQuestions();
 			myquery.findAll();
 			A = myquery.findAnswers();
-			MazeModel question = new MazeModel(Q,A,I); 
-			
+			MazeModel question = new MazeModel(Q,A,I);
 			
 			launch(args);
 		
 			System.out.println();
-			
-		
+
 			conn.close();
-		
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-    	
-    	
-    	
-    	
-    		
     }
 
     @Override
@@ -68,7 +55,6 @@ public class TriviaMaze extends Application {
         MazeController controller = new MazeController();
         controller.buildView(primaryStage);
     }
-    
   
 }
 

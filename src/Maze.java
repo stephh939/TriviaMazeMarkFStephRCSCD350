@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
-
 import DialogBoxes.ErrorDialog;
 import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
@@ -236,14 +235,19 @@ public class Maze extends GridPane {
     }
 
     public void setWallToUnlocked(int x, int y) {
-        images[x][y].setUserData("unlocked");
+        ImageView wall = images[x][y];
+        if (wall.getUserData().equals("horizLocked")) {
+            wall.setImage(new Image("Images/unlockedHoriz.png"));
+        }
+        else if (wall.getUserData().equals("vertLocked")){
+            wall.setImage(new Image("Images/unlockedVert.png"));
+        }
+        wall.setUserData("unlocked");
     }
 
     public void changeGameCharacter(String character) {
         this.character = character;
         images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
     }
-    
-    
     
 }
