@@ -1,3 +1,5 @@
+import DialogBoxes.InputDialog;
+import DialogBoxes.WarningDialog;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -50,12 +52,19 @@ public class MazeController {
         adminView.getClose().setOnAction(click -> onClose());
 
         primaryStage.setResizable(false);
-        primaryStage.setScene(adminScene);
+        primaryStage.setScene(mainScene);
         primaryStage.show();
     }
 
     private void onAdmin() {
-        stage.setScene(adminScene);
+        InputDialog login = new InputDialog("Enter the admin password");
+        if (login.getAnswer().equals("root")) {
+            stage.setScene(adminScene);
+        }
+        else {
+            WarningDialog wrongPassword = new WarningDialog("You entered the incorrect password");
+            wrongPassword.showAndWait();
+        }
     }
 
     private void onClose() {
