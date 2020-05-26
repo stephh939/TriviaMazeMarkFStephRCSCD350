@@ -1,13 +1,13 @@
 public class Question {
 
+    private String questionId;
     private String question;
     private String answer;
-    private String questionId;
 
     public Question(String question, String answer, String questionId) {
+        this.questionId = questionId;
         this.question = question;
         this.answer = answer;
-        this.questionId = questionId;
     }
 
     public String getQuestionId() {
@@ -18,19 +18,19 @@ public class Question {
         this.questionId = questionId;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getQuestion() {
+        return question;
     }
 
     public String getAnswer() {
         return answer;
     }
 
-    public String getQuestion() {
-        return question;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

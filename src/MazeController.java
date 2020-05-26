@@ -48,6 +48,7 @@ public class MazeController {
         adminScene = new Scene(adminView, 800, 800);
 
         adminView.getClose().setOnAction(click -> onClose());
+        adminView.getEditSave();
 
         primaryStage.setResizable(false);
         primaryStage.setScene(adminScene);
@@ -75,12 +76,14 @@ public class MazeController {
                         String answer = maze.showWallDialog();
                         System.out.print(answer);
                         if (answer.equals("correct")) {
+                            AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc, maze.yLoc - 1);
                         }
                         //else if (answer.compareTo())
                         // if user gets it wrong seal door
                         else {
+                            AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc, maze.yLoc - 1);
                             correctAnswer = false;
                         }
@@ -98,11 +101,13 @@ public class MazeController {
                         // Prompt user for a response to question
                         String answer = maze.showWallDialog();
                         if (answer.equals("correct")) {
+                            AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc, maze.yLoc + 1);
                         }
                         // if user gets it wrong seal door
                         else {
+                            AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc, maze.yLoc + 1);
                             correctAnswer = false;
                         }
@@ -120,11 +125,13 @@ public class MazeController {
                         // Prompt user for a response to question
                         String answer = maze.showWallDialog();
                         if (answer.equals("correct")) {
+                            AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc + 1, maze.yLoc);
                         }
                         // if user gets it wrong seal door
                         else {
+                            AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc + 1, maze.yLoc);
                             correctAnswer = false;
                         }
@@ -142,11 +149,13 @@ public class MazeController {
                         // Prompt user for a response to question
                         String answer = maze.showWallDialog();
                         if (answer.equals("correct")) {
+                            AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc - 1, maze.yLoc);
                         }
                         // if user gets it wrong seal door
                         else {
+                            AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc - 1, maze.yLoc);
                             correctAnswer = false;
                         }

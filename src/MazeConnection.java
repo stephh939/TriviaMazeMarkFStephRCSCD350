@@ -33,7 +33,7 @@ public class MazeConnection {
 			String ID = resultSet.getString(1);
 			String question = resultSet.getString(2);
 			String answer = resultSet.getString(3);
-			table.getItems().add(new Question(answer, question, ID));
+			table.getItems().add(new Question(question, answer, ID));
 		}
 	}
 

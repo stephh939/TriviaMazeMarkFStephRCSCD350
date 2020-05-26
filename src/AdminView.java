@@ -14,16 +14,22 @@ import java.sql.SQLException;
 public class AdminView extends BorderPane {
 
     private Button close, editSave;
+    private QuestionsTable table;
 
     public AdminView() throws SQLException {
         setTop(createTitle());
 
-        QuestionsTable table = new QuestionsTable();
+        table = new QuestionsTable();
         MazeConnection conn = connectToDatabase();
         conn.fillTable(table);
         setCenter(table);
 
+        //editSave.setOnAction(click -> onEditSave());
+
         setBottom(buildToolBar());
+    }
+
+    private void onEditSave() {
     }
 
     private HBox buildToolBar() {
