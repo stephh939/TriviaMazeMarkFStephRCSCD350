@@ -4,7 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 
 // Takes the actions from the view and translates that to the Model to do business work

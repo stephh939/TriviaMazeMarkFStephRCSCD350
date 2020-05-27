@@ -1,4 +1,3 @@
-import javafx.collections.ObservableList;
 import org.sqlite.SQLiteDataSource;
 import java.io.IOException;
 import java.sql.*;
