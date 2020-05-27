@@ -42,15 +42,10 @@ public class MazeController {
         view.admin.setOnAction(event -> onAdmin());
 
         // Admin scene
-        try {
-            adminView = new AdminView();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        adminView = new AdminView();
         adminScene = new Scene(adminView, 800, 800);
 
         adminView.getClose().setOnAction(click -> onClose());
-        adminView.getEditSave();
 
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
@@ -59,6 +54,7 @@ public class MazeController {
 
     private void onAdmin() {
         InputDialog login = new InputDialog("Enter the admin password");
+        login.setTitle("Admin Login");
         if (login.getAnswer().equals("root")) {
             stage.setScene(adminScene);
         }

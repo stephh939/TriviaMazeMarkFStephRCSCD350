@@ -1,20 +1,20 @@
 public class Question {
 
-    private String questionId;
+    private Integer questionId;
     private String question;
     private String answer;
 
-    public Question(String question, String answer, String questionId) {
+    public Question(String question, String answer, Integer questionId) {
         this.questionId = questionId;
         this.question = question;
         this.answer = answer;
     }
 
-    public String getQuestionId() {
+    public Integer getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
 

@@ -1,3 +1,4 @@
+import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -6,40 +7,48 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
+import jdk.internal.util.xml.impl.Input;
 import org.sqlite.SQLiteDataSource;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class AdminView extends BorderPane {
 
-    private Button close, editSave;
+    private Button close;
     private QuestionsTable table;
+    private MazeConnection databaseConnection;
 
-    public AdminView() throws SQLException {
-        setTop(createTitle());
-
+    public AdminView() {
         table = new QuestionsTable();
-        MazeConnection conn = connectToDatabase();
-        conn.fillTable(table);
+        try {
+            databaseConnection = new MazeConnection();
+            databaseConnection.fillTable(table);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        setTop(createTitle());
         setCenter(table);
-
-        //editSave.setOnAction(click -> onEditSave());
-
         setBottom(buildToolBar());
     }
 
-    private void onEditSave() {
+    private void onAdd() {
+        InputDialog questionDialog = new InputDialog("Please enter the question:");
+        String question = questionDialog.getAnswer();
+        InputDialog answerDialog = new InputDialog("Please enter the answer:");
+        String answer = answerDialog.getAnswer();
+        databaseConnection.addQuestionToDatabase(question, answer, table);
+        table.sort();
     }
 
     private HBox buildToolBar() {
-        editSave = new Button("Edit");
-        editSave.setPadding(new Insets(8, 16, 8, 16));
+        Button add = new Button("Add");
+        add.setPadding(new Insets(8, 16, 8, 16));
+        add.setOnAction(click -> onAdd());
 
         close = new Button("Close");
         close.setPadding(new Insets(8, 16, 8, 16));
 
-        HBox toolbar = new HBox(editSave, close);
+        HBox toolbar = new HBox(add, close);
         toolbar.setAlignment(Pos.CENTER_RIGHT);
         toolbar.setPadding(new Insets(8));
         toolbar.setSpacing(16);
@@ -56,36 +65,8 @@ public class AdminView extends BorderPane {
         return title;
     }
 
-    private MazeConnection connectToDatabase() {
-        SQLiteDataSource ds;
-        MazeConnection myQuery = null;
-        try {
-            ds = new SQLiteDataSource();
-            ds.setUrl("jdbc:sqlite:questionsDatabase1.db");
-            Connection conn = ds.getConnection();
-            myQuery = new MazeConnection(conn);
-        }catch(Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-
-        return myQuery;
-    }
-
-    public Button getEditSave() {
-        return editSave;
-    }
-
-    public void setEditSave(Button editSave) {
-        this.editSave = editSave;
-    }
-
     public Button getClose() {
         return close;
-    }
-
-    public void setClose(Button close) {
-        this.close = close;
     }
 
 }

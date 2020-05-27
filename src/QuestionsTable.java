@@ -5,13 +5,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class QuestionsTable extends TableView {
 
-    private TableColumn answer;
-    private TableColumn question;
-
     public QuestionsTable() {
         TableColumn id = new TableColumn("ID");
-        question = new TableColumn("Question");
-        answer = new TableColumn("Answer");
+        TableColumn question = new TableColumn("Question");
+        TableColumn answer = new TableColumn("Answer");
 
         id.setCellValueFactory(new PropertyValueFactory<>("questionId"));
         question.setCellValueFactory(new PropertyValueFactory<>("question"));
@@ -20,15 +17,8 @@ public class QuestionsTable extends TableView {
         getColumns().add(id);
         getColumns().add(question);
         getColumns().add(answer);
+
+        getSortOrder().add(id);
     }
 
-    protected void enableEdit() {
-        question.setEditable(true);
-        answer.setEditable(true);
-    }
-
-    protected void save() {
-        question.setEditable(false);
-        answer.setEditable(false);
-    }
 }
