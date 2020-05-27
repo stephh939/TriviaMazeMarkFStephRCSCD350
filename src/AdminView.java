@@ -1,15 +1,11 @@
 import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
-import jdk.internal.util.xml.impl.Input;
-import org.sqlite.SQLiteDataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class AdminView extends BorderPane {
