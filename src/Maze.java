@@ -1,10 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Random;
 import DialogBoxes.ErrorDialog;
-import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -118,7 +112,7 @@ public class Maze extends GridPane {
     }
 
     public String showWallDialog(){
-    	ArrayList<String> q = MazeModel.getQuestion();
+    	/*ArrayList<String> q = MazeModel.getQuestion();
     	ArrayList<String> i = MazeModel.getID();
     	ArrayList<String> a = MazeModel.getAnswer();
     	Random r = new Random();
@@ -137,9 +131,9 @@ public class Maze extends GridPane {
     	else {
     			
     		return "incorrect";
-    	}
+    	}*/
     
-   
+        return "correct";
     }
 
     public boolean canMoveUp() {
