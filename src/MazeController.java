@@ -22,7 +22,7 @@ public class MazeController {
         // Main scene
         view = new MazeView(primaryStage);
         mainScene = new Scene(view, 800, 800);
-        mainScene.setOnKeyPressed(keyEvent -> onKeyPressed(keyEvent));
+        mainScene.setOnKeyPressed(this::onKeyPressed);
         view.admin.setOnAction(event -> onAdmin());
 
         // Admin scene
