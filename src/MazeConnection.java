@@ -13,7 +13,7 @@ public class MazeConnection {
 
 	public MazeConnection() {
 		questionsIDs = new String[5][5];
-		SQLiteDataSource ds = null;
+		SQLiteDataSource ds;
 		try {
 			ds = new SQLiteDataSource();
 			ds.setUrl("jdbc:sqlite:questionsDatabase1.db");
