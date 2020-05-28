@@ -204,9 +204,7 @@ public class Maze extends GridPane {
     protected boolean upDoorUnlocked() {
         if (yLoc - 2 > -1) {
             ImageView wall = images[xLoc][yLoc - 1];
-            if (wall.getUserData().equals("unlocked")) {
-                return true;
-            }
+            return wall.getUserData().equals("unlocked");
         }
         return false;
     }
@@ -214,9 +212,7 @@ public class Maze extends GridPane {
     protected boolean downDoorUnlocked() {
         if (yLoc + 2 < images.length) {
             ImageView wall = images[xLoc][yLoc + 1];
-            if (wall.getUserData().equals("unlocked")) {
-                return true;
-            }
+            return wall.getUserData().equals("unlocked");
         }
         return false;
     }
@@ -224,9 +220,7 @@ public class Maze extends GridPane {
     protected boolean rightDoorUnlocked() {
         if (xLoc + 2 < images.length) {
             ImageView wall = images[xLoc + 1][yLoc];
-            if (wall.getUserData().equals("unlocked")) {
-                return true;
-            }
+            return wall.getUserData().equals("unlocked");
         }
         return false;
     }
@@ -234,9 +228,7 @@ public class Maze extends GridPane {
     protected boolean leftDoorUnlocked() {
         if (xLoc - 2 > -1) {
             ImageView wall = images[xLoc - 1][yLoc];
-            if (wall.getUserData().equals("unlocked")) {
-                return true;
-            }
+            return wall.getUserData().equals("unlocked");
         }
         return false;
     }
