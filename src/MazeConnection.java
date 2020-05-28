@@ -46,16 +46,6 @@ public class MazeConnection {
 		}
 	}
 
-	public void findAll()throws SQLException {
-	   String query = "select Questions.ID, Questions.Question, Answers.Answer\r\n" +
-			"from Questions, Answers\r\n" +
-			"where Questions.ID = Answers.ID\r\n" +
-			"order by Questions.ID asc";
-
-	   statement = conn.createStatement();
-	   resultSet = statement.executeQuery(query);
-	}
-
 	private void fillQuestionIdArray() throws SQLException {
 		//TODO: Fill the questionsIDs 2D array with random questions
 	}
