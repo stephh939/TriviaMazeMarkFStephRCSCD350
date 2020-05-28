@@ -1,8 +1,8 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 public class TriviaMaze extends Application {
 

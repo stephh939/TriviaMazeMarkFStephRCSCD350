@@ -7,4 +7,5 @@ public class WarningDialog extends Alert {
     public WarningDialog(String warningMessage) {
         super(AlertType.WARNING, warningMessage);
     }
+
 }

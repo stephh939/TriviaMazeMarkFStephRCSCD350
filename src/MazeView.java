@@ -1,15 +1,10 @@
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.*;
-
-// This is where we make everything that is show
-// Here we don't care about the data
 
 public class MazeView extends BorderPane {
 
@@ -150,5 +145,9 @@ public class MazeView extends BorderPane {
     protected Maze getMaze() {
         return maze;
     }
+
+    // TODO: when the user gets to the exit end the game
+    // User would be in xLoc = 4 and yLoc = 4
+    // Put the character back to 0,0
 
 }

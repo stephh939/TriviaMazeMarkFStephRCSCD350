@@ -14,14 +14,10 @@ public class AdminView extends BorderPane {
     private QuestionsTable table;
     private MazeConnection databaseConnection;
 
-    public AdminView() {
+    public AdminView() throws SQLException {
         table = new QuestionsTable();
-        try {
             databaseConnection = new MazeConnection();
             databaseConnection.fillTable(table);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         setTop(createTitle());
         setCenter(table);
         setBottom(buildToolBar());

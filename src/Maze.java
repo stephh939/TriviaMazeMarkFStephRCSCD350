@@ -1,6 +1,8 @@
 import DialogBoxes.ErrorDialog;
+import DialogBoxes.InputDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -9,13 +11,20 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+import java.util.Optional;
+
 public class Maze extends GridPane {
 
     private ImageView [][] images;
     protected int xLoc, yLoc;
     private String character;
+    private ButtonType tnt, fix;
+    private boolean tntIsUsed, fixIsUsed;
 
     public Maze(int width, int height) {
+        tnt = new ButtonType("TNT");
+        fix = new ButtonType("Fix");
+
         character = "Android";
         createBoard(width, height);
         setAlignment(Pos.CENTER);
@@ -64,6 +73,11 @@ public class Maze extends GridPane {
         exit.setImage(new Image("Images/exit.png"));
     }
 
+    public String showWallDialog(String question){
+        InputDialog questionDialog = new InputDialog(question);
+        return questionDialog.getAnswer().toLowerCase();
+    }
+
     protected void sealDoor(int x, int y) {
         ImageView lockedDoor = images[x][y];
         if (lockedDoor.getUserData().equals("vertLocked")) {
@@ -77,6 +91,22 @@ public class Maze extends GridPane {
         else {
             System.out.println("Wrong node index passed in sealDoor method");
         }
+    }
+
+    public void setWallToUnlocked(int x, int y) {
+        ImageView wall = images[x][y];
+        if (wall.getUserData().equals("horizLocked")) {
+            wall.setImage(new Image("Images/unlockedHoriz.png"));
+        }
+        else if (wall.getUserData().equals("vertLocked")){
+            wall.setImage(new Image("Images/unlockedVert.png"));
+        }
+        wall.setUserData("unlocked");
+    }
+
+    public void changeGameCharacter(String character) {
+        this.character = character;
+        images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
     }
 
     protected void moveRight(boolean correctAnswer) {
@@ -111,37 +141,12 @@ public class Maze extends GridPane {
         }
     }
 
-    public String showWallDialog(){
-    	/*ArrayList<String> q = MazeModel.getQuestion();
-    	ArrayList<String> i = MazeModel.getID();
-    	ArrayList<String> a = MazeModel.getAnswer();
-    	Random r = new Random();
-    	int random = r.nextInt(q.size());
-    	
-    	InputDialog question = new InputDialog("ID: "+ i.get(random) + " " + q.get(random));
-    	String que = question.getAnswer().toLowerCase();
-    	
-    	if(que.compareTo(a.get(random)) == 0) {
-    		q.remove(random);
-    		a.remove(random);
-    		i.remove(random);
-    		return "correct";
-    	}
-       
-    	else {
-    			
-    		return "incorrect";
-    	}*/
-    
-        return "correct";
-    }
-
     public boolean canMoveUp() {
         if (yLoc - 2 > -1) {
             ImageView wall = images[xLoc][yLoc - 1];
             if (wall.getUserData().equals("sealed")) {
-                ErrorDialog message = new ErrorDialog("This door is sealed");
-                message.showAndWait();
+                ErrorDialog message = new ErrorDialog("This door is sealed", tnt, fix);
+                handleButtonClick(message.showAndWait());
                 return false;
             }
             return true;
@@ -153,8 +158,8 @@ public class Maze extends GridPane {
         if (yLoc + 2 < images.length) {
             ImageView wall = images[xLoc][yLoc + 1];
             if (wall.getUserData().equals("sealed")) {
-                ErrorDialog message = new ErrorDialog("This door is sealed");
-                message.showAndWait();
+                ErrorDialog message = new ErrorDialog("This door is sealed", tnt, fix);
+                handleButtonClick(message.showAndWait());
                 return false;
             }
             return true;
@@ -166,8 +171,8 @@ public class Maze extends GridPane {
         if (xLoc + 2 < images.length) {
             ImageView wall = images[xLoc + 1][yLoc];
             if (wall.getUserData().equals("sealed")) {
-                ErrorDialog message = new ErrorDialog("This door is sealed");
-                message.showAndWait();
+                ErrorDialog message = new ErrorDialog("This door is sealed", tnt, fix);
+                handleButtonClick(message.showAndWait());
                 return false;
             }
             return true;
@@ -179,13 +184,21 @@ public class Maze extends GridPane {
         if (xLoc - 2 > -1) {
             ImageView wall = images[xLoc - 1][yLoc];
             if (wall.getUserData().equals("sealed")) {
-                ErrorDialog message = new ErrorDialog("This door is sealed");
-                message.showAndWait();
+                ErrorDialog message = new ErrorDialog("This door is sealed", tnt, fix);
+                handleButtonClick(message.showAndWait());
                 return false;
             }
             return true;
         }
         return false;
+    }
+
+    private void handleButtonClick(Optional<ButtonType> result) {
+        if (result.get() == tnt){
+            //TODO: Set door to unlocked
+        } else if (result.get() == fix) {
+            // TODO: Give the user a second chance
+        }
     }
 
     public boolean upDoorUnlocked() {
@@ -228,20 +241,11 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public void setWallToUnlocked(int x, int y) {
-        ImageView wall = images[x][y];
-        if (wall.getUserData().equals("horizLocked")) {
-            wall.setImage(new Image("Images/unlockedHoriz.png"));
-        }
-        else if (wall.getUserData().equals("vertLocked")){
-            wall.setImage(new Image("Images/unlockedVert.png"));
-        }
-        wall.setUserData("unlocked");
+    public void checkIfStuck() {
+        // TODO: Check if all the rooms around them are locked
     }
 
-    public void changeGameCharacter(String character) {
-        this.character = character;
-        images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
+    public void endGame() {
+        // TODO: end the game
     }
-    
 }
