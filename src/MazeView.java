@@ -128,7 +128,7 @@ public class MazeView extends BorderPane {
         tnt = new Button("TNT");
         tnt.setPadding(new Insets(8,16,8,16));
         HBox helperButtons = new HBox();
-        helperButtons.setMargin(fix, new Insets(0,0,0,600));
+        HBox.setMargin(fix, new Insets(0,0,0,600));
         helperButtons.setSpacing(8);
         helperButtons.getChildren().addAll(fix, tnt);
 
