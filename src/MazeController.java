@@ -13,7 +13,7 @@ public class MazeController {
     private Stage stage;
     private MazeConnection connection;
 
-    public void buildView(Stage primaryStage) throws SQLException {
+    protected void buildView(Stage primaryStage) throws SQLException {
         connection = new MazeConnection();
         stage = primaryStage;
         primaryStage.getIcons().add(new Image("Images/ApplicationImage.PNG"));
@@ -51,8 +51,6 @@ public class MazeController {
     private void onClose() {
         stage.setScene(mainScene);
     }
-
-    // TODO: Add game helpers ie. TNT or Fix
 
     private void onKeyPressed(KeyEvent keyEvent) {
         Maze maze = view.getMaze();

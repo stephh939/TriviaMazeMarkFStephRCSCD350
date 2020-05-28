@@ -21,7 +21,7 @@ public class Maze extends GridPane {
     private ButtonType tnt, fix;
     private boolean tntIsUsed, fixIsUsed;
 
-    public Maze(int width, int height) {
+    protected Maze(int width, int height) {
         tnt = new ButtonType("TNT");
         fix = new ButtonType("Fix");
 
@@ -73,7 +73,7 @@ public class Maze extends GridPane {
         exit.setImage(new Image("Images/exit.png"));
     }
 
-    public String showWallDialog(String question){
+    protected String showWallDialog(String question){
         InputDialog questionDialog = new InputDialog(question);
         return questionDialog.getAnswer().toLowerCase();
     }
@@ -93,7 +93,7 @@ public class Maze extends GridPane {
         }
     }
 
-    public void setWallToUnlocked(int x, int y) {
+    protected void setWallToUnlocked(int x, int y) {
         ImageView wall = images[x][y];
         if (wall.getUserData().equals("horizLocked")) {
             wall.setImage(new Image("Images/unlockedHoriz.png"));
@@ -104,7 +104,7 @@ public class Maze extends GridPane {
         wall.setUserData("unlocked");
     }
 
-    public void changeGameCharacter(String character) {
+    protected void changeGameCharacter(String character) {
         this.character = character;
         images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
     }
@@ -141,7 +141,7 @@ public class Maze extends GridPane {
         }
     }
 
-    public boolean canMoveUp() {
+    protected boolean canMoveUp() {
         if (yLoc - 2 > -1) {
             ImageView wall = images[xLoc][yLoc - 1];
             if (wall.getUserData().equals("sealed")) {
@@ -154,7 +154,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean canMoveDown() {
+    protected boolean canMoveDown() {
         if (yLoc + 2 < images.length) {
             ImageView wall = images[xLoc][yLoc + 1];
             if (wall.getUserData().equals("sealed")) {
@@ -167,7 +167,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean canMoveRight() {
+    protected boolean canMoveRight() {
         if (xLoc + 2 < images.length) {
             ImageView wall = images[xLoc + 1][yLoc];
             if (wall.getUserData().equals("sealed")) {
@@ -180,7 +180,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean canMoveLeft() {
+    protected boolean canMoveLeft() {
         if (xLoc - 2 > -1) {
             ImageView wall = images[xLoc - 1][yLoc];
             if (wall.getUserData().equals("sealed")) {
@@ -201,7 +201,7 @@ public class Maze extends GridPane {
         }
     }
 
-    public boolean upDoorUnlocked() {
+    protected boolean upDoorUnlocked() {
         if (yLoc - 2 > -1) {
             ImageView wall = images[xLoc][yLoc - 1];
             if (wall.getUserData().equals("unlocked")) {
@@ -211,7 +211,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean downDoorUnlocked() {
+    protected boolean downDoorUnlocked() {
         if (yLoc + 2 < images.length) {
             ImageView wall = images[xLoc][yLoc + 1];
             if (wall.getUserData().equals("unlocked")) {
@@ -221,7 +221,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean rightDoorUnlocked() {
+    protected boolean rightDoorUnlocked() {
         if (xLoc + 2 < images.length) {
             ImageView wall = images[xLoc + 1][yLoc];
             if (wall.getUserData().equals("unlocked")) {
@@ -231,7 +231,7 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public boolean leftDoorUnlocked() {
+    protected boolean leftDoorUnlocked() {
         if (xLoc - 2 > -1) {
             ImageView wall = images[xLoc - 1][yLoc];
             if (wall.getUserData().equals("unlocked")) {
@@ -241,11 +241,11 @@ public class Maze extends GridPane {
         return false;
     }
 
-    public void checkIfStuck() {
+    protected void checkIfStuck() {
         // TODO: Check if all the rooms around them are locked
     }
 
-    public void endGame() {
+    protected void endGame() {
         // TODO: end the game
     }
 }
