@@ -22,7 +22,13 @@ public class MazeController {
         // Main scene
         view = new MazeView(primaryStage);
         mainScene = new Scene(view, 800, 800);
-        mainScene.setOnKeyPressed(this::onKeyPressed);
+        mainScene.setOnKeyPressed(event -> {
+			try {
+				onKeyPressed(event);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
         view.admin.setOnAction(event -> onAdmin());
 
         // Admin scene
@@ -52,7 +58,7 @@ public class MazeController {
         stage.setScene(mainScene);
     }
 
-    private void onKeyPressed(KeyEvent keyEvent) {
+    private void onKeyPressed(KeyEvent keyEvent) throws SQLException {
         Maze maze = view.getMaze();
         switch (keyEvent.getCode()){
             case UP :
