@@ -23,11 +23,13 @@ public class AdminView extends BorderPane {
         setBottom(buildToolBar());
     }
 
-    private void onAdd() {
+    private void onAdd() throws SQLException {
         InputDialog questionDialog = new InputDialog("Please enter the question:");
         String question = questionDialog.getAnswer();
         InputDialog answerDialog = new InputDialog("Please enter the answer:");
         String answer = answerDialog.getAnswer();
+        
+        
         databaseConnection.addQuestionToDatabase(question, answer, table);
         table.sort();
     }
@@ -35,7 +37,13 @@ public class AdminView extends BorderPane {
     private HBox buildToolBar() {
         Button add = new Button("Add");
         add.setPadding(new Insets(8, 16, 8, 16));
-        add.setOnAction(click -> onAdd());
+        add.setOnAction(click -> {
+			try {
+				onAdd();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 
         close = new Button("Close");
         close.setPadding(new Insets(8, 16, 8, 16));

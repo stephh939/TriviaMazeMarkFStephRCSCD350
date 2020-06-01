@@ -1,8 +1,5 @@
 import org.sqlite.SQLiteDataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class MazeConnection {
 	
@@ -24,9 +21,43 @@ public class MazeConnection {
 		}
 	}
 
-	public void addQuestionToDatabase(String question, String answer, QuestionsTable table) {
+	public void addQuestionToDatabase(String question, String answer, QuestionsTable table) throws SQLException {
+		
+		Integer id = null;
+		String query = "select MAX(Questions.ID)\r\n" + 
+				"from Answers, Questions";
+		
+		statement = conn.createStatement(); 
+		resultSet = statement.executeQuery(query);
+		
+		while(resultSet.next()) {
+			id = Integer.parseInt(resultSet.getString(1));	
+			id = id +1; 
+		}
+		
+		query = "Insert into Questions (ID, Question)" + "Values(?,?)";
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setInt(1,id);
+		ps.setString(2, question);
+		ps.execute();
+		
+		query = "Insert into Answers (ID, Answer)" + "Values(?,?)";
+		ps = conn.prepareStatement(query);
+		ps.setInt(1,id);
+		ps.setString(2, answer);
+		ps.execute();
+		
+		
+		
+		
+		if(id != null && question != null && answer != null) {
+			table.getItems().add(new Question(question, answer, id));
+		
+		}
+		
+		
 		//TODO: Find the next ID available and then insert new question into the database
-		//table.getItems().add(new Question(question, answer, id));
+		
 	}
 
 	public void fillTable(QuestionsTable table) throws SQLException {
@@ -46,19 +77,38 @@ public class MazeConnection {
 		}
 	}
 
-	private void fillQuestionIdArray() throws SQLException {
-		//TODO: Fill the questionsIDs 2D array with random questions
+	protected String getQuestion(int xLoc, int yLoc) throws SQLException {
+		String questionID = questionsIDs[xLoc][yLoc];
+		String q = null; 
+		String query = "select Question\r\n" + 
+				"from Questions\r\n" + 
+				"where Questions.ID = " + questionID;
+		
+		statement = conn.createStatement(); 
+		resultSet = statement.executeQuery(query);
+		
+		while(resultSet.next()) {
+			q = resultSet.getString(1);
+			return q; 
+		}
+		
+		return q;
 	}
 
-	protected String getQuestion(int xLoc, int yLoc) {
+	public boolean checkAnswer(int xLoc, int yLoc, String answer) throws SQLException {
 		String questionID = questionsIDs[xLoc][yLoc];
-		//TODO: Create a select to be able to get the question for the dialog box
-		return "Question";
-	}
-
-	public boolean checkAnswer(int xLoc, int yLoc, String answer) {
-		String questionID = questionsIDs[xLoc][yLoc];
-		//TODO: Create a select to find the answer and compare to what the user inputted
+		
+		String query = "select Answer\r\n" + 
+				"from Answers\r\n" + 
+				"where Answers.ID = " + questionID + " and Answer = " + answer;
+		
+		statement = conn.createStatement();
+		resultSet = statement.executeQuery(query);
+		
+		if(resultSet.next()) {
+			return true; 
+		}
+		
 		return false;
 	}
 }
