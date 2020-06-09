@@ -10,7 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.io.*;
 
 public class GamesManager {
@@ -92,7 +91,7 @@ public class GamesManager {
         secondaryLayout.setCenter(gameFiles);
         secondaryLayout.setBottom(hBox);
 
-        Scene secondScene = new Scene(secondaryLayout, 400, 400);
+        Scene secondScene = new Scene(secondaryLayout, 250, 300);
 
         newWindow.setTitle("Open Game");
         newWindow.setScene(secondScene);
@@ -128,4 +127,5 @@ public class GamesManager {
     public void onNew() {
         currentFile = null;
     }
+
 }
