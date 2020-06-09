@@ -9,7 +9,7 @@ public class MazeConnection {
 	private String [][] questionsIDs;
 
 	public MazeConnection() {
-		questionsIDs = new String[5][5];
+		questionsIDs = new String[9][5];
 		SQLiteDataSource ds;
 		try {
 			ds = new SQLiteDataSource();
@@ -22,7 +22,6 @@ public class MazeConnection {
 	}
 
 	public void addQuestionToDatabase(String question, String answer, QuestionsTable table) throws SQLException {
-		
 		Integer id = null;
 		String query = "select MAX(Questions.ID)\r\n" + 
 				"from Answers, Questions";
@@ -47,17 +46,13 @@ public class MazeConnection {
 		ps.setString(2, answer);
 		ps.execute();
 		
-		
-		
-		
 		if(id != null && question != null && answer != null) {
 			table.getItems().add(new Question(question, answer, id));
-		
 		}
-		
-		
-		//TODO: Find the next ID available and then insert new question into the database
-		
+	}
+
+	protected void fillQuestionsIdArray () {
+		//TODO: Fill the array with the questions for the doors
 	}
 
 	public void fillTable(QuestionsTable table) throws SQLException {
@@ -110,5 +105,11 @@ public class MazeConnection {
 		}
 		
 		return false;
+	}
+
+	protected String[][] getQuestionsIDs() { return questionsIDs; }
+
+	protected void setQuestionsIDs(String [][] idArray) {
+		this.questionsIDs = idArray;
 	}
 }

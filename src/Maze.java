@@ -17,7 +17,7 @@ public class Maze extends GridPane {
 
     private ImageView [][] images;
     protected int xLoc, yLoc;
-    private String character;
+    protected String character;
     private ButtonType tnt, fix;
     private boolean tntIsUsed, fixIsUsed;
 
@@ -239,5 +239,13 @@ public class Maze extends GridPane {
 
     protected void endGame() {
         // TODO: end the game
+    }
+
+    public void refreshCharacterLocation() {
+        images[xLoc][yLoc].setImage(new Image("Images/" + character + ".png"));
+    }
+
+    public void clearCharacter() {
+        images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
     }
 }

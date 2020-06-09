@@ -16,8 +16,8 @@ public class AdminView extends BorderPane {
 
     public AdminView() throws SQLException {
         table = new QuestionsTable();
-            databaseConnection = new MazeConnection();
-            databaseConnection.fillTable(table);
+        databaseConnection = new MazeConnection();
+        databaseConnection.fillTable(table);
         setTop(createTitle());
         setCenter(table);
         setBottom(buildToolBar());
@@ -28,7 +28,6 @@ public class AdminView extends BorderPane {
         String question = questionDialog.getAnswer();
         InputDialog answerDialog = new InputDialog("Please enter the answer:");
         String answer = answerDialog.getAnswer();
-        
         
         databaseConnection.addQuestionToDatabase(question, answer, table);
         table.sort();
