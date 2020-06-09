@@ -9,18 +9,16 @@ import java.io.*;
 public class MazeView extends BorderPane {
 
     private Maze maze;
-    private Stage stage;
     protected Button admin;
     protected MenuItem newGame, saveGame, open;
 
-    public MazeView(Stage primaryStage) {
+    public MazeView() {
         MenuBar menuBar = createMenuBar();
         maze = new Maze(5, 5);
         HBox toolBar = createToolBar();
         setTop(menuBar);
         setCenter(maze);
         setBottom(toolBar);
-        stage = primaryStage;
     }
 
     private MenuBar createMenuBar() {

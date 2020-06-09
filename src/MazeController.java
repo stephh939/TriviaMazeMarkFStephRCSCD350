@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import java.io.File;
+
 import java.sql.SQLException;
 
 public class MazeController {
@@ -22,7 +22,7 @@ public class MazeController {
         primaryStage.getIcons().add(new Image("Images/ApplicationImage.PNG"));
         primaryStage.setTitle("Trivia Maze");
 
-        view = new MazeView(primaryStage);
+        view = new MazeView();
         mainScene = new Scene(view, 800, 800);
         mainScene.setOnKeyPressed(event -> {
 			try {
