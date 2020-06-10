@@ -14,7 +14,7 @@ public class MazeView extends BorderPane {
 
     public MazeView() {
         MenuBar menuBar = createMenuBar();
-        maze = new Maze(5, 5);
+        maze = new Maze(2, 2);
         HBox toolBar = createToolBar();
         setTop(menuBar);
         setCenter(maze);
@@ -46,7 +46,7 @@ public class MazeView extends BorderPane {
     }
 
     protected void createNewMaze() {
-        maze = new Maze(5,5);
+        maze = new Maze(2,2);
     }
 
     private Menu createOptionsMenu() {
@@ -82,9 +82,5 @@ public class MazeView extends BorderPane {
     protected Maze getMaze() {
         return maze;
     }
-
-    // TODO: when the user gets to the exit end the game
-    // User would be in xLoc = 4 and yLoc = 4
-    // Put the character back to 0,0
 
 }

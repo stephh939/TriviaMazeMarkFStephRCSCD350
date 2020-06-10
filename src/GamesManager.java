@@ -5,19 +5,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.*;
 
-public class GamesManager {
+public class GamesManager implements Serializable {
 
     private GamePickerTable gameFiles;
     private File currentFile;
     private Stage newWindow;
     private String workingDirectoryForGameFiles;
+    protected Object[] gameData;
+    //private transient int xloc=0;
 
     public GamesManager() {
         gameFiles = new GamePickerTable();
@@ -26,7 +28,7 @@ public class GamesManager {
         fillTable();
     }
 
-    protected void saveGame(String [][] questionsID, int xLoc, int yLoc, String character) {
+    protected void saveGame(Integer [][] questionsID, int xLoc, int yLoc, String character, String[][] wallsImages, String[][] walls) {
         File selectedFile = currentFile;
         File newFile;
         if (currentFile == null) {
@@ -39,16 +41,18 @@ public class GamesManager {
             }
             gameFiles.getItems().add(new GameName(fileName));
             currentFile = newFile;
+            selectedFile = newFile;
         }
         if (selectedFile != null) {
             try {
-                FileOutputStream fileOutputStream = new FileOutputStream(selectedFile);
+                FileOutputStream fileOutputStream = new FileOutputStream(currentFile);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
                 objectOutputStream.writeObject(questionsID);
-                objectOutputStream.writeObject(xLoc);
-                objectOutputStream.writeObject(yLoc);
+                objectOutputStream.writeInt(xLoc);
+                objectOutputStream.writeInt(yLoc);
                 objectOutputStream.writeObject(character);
-
+                objectOutputStream.writeObject(wallsImages);
+                objectOutputStream.writeObject(walls);
             } catch (Exception ex) {
                 System.out.println("ID10T ERROR: " + ex);
                 return;
@@ -57,31 +61,34 @@ public class GamesManager {
         }
     }
 
-    protected Object[] onOpen() {
+    protected void onOpen() {
         String gameName = ((GameName) gameFiles.getSelectionModel().getSelectedItem()).getGameName();
         gameName = workingDirectoryForGameFiles + gameName + ".txt";
-        newWindow.close();
 
         File game = new File(gameName);
-        Object[] gameData = new Object[4];
+        Object[] gameData = new Object[6];
         try {
             FileInputStream fileInputStream = new FileInputStream(game);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            String[][] questionIds = (String[][]) objectInputStream.readObject();
-            int xLoc = (int) objectInputStream.readObject();
-            int yLoc = (int) objectInputStream.readObject();
+            Integer[][] questionIds = (Integer[][]) objectInputStream.readObject();
+            int xLoc = objectInputStream.readInt();
+            int yLoc = objectInputStream.readInt();
             String character = (String) objectInputStream.readObject();
-            gameData = new Object[]{questionIds, xLoc, yLoc, character};
+            String [][] wallsImages = (String[][]) objectInputStream.readObject();
+            String[][] walls = (String[][]) objectInputStream.readObject();
+            gameData = new Object[]{questionIds, xLoc, yLoc, character, wallsImages, walls};
         }
         catch(IOException | ClassNotFoundException ex){
-                System.out.print("Error: " + ex);
-            }
+            System.out.print("Error: " + ex);
+        }
 
-            currentFile = game;
-            return gameData;
+        currentFile = game;
+        this.gameData = gameData;
+        newWindow.close();
     }
 
     public void fileChooser() {
+
         Button open = new Button("Open");
         open.setPadding(new Insets(8, 16, 8, 16));
         HBox hBox = new HBox(open);
@@ -93,12 +100,12 @@ public class GamesManager {
 
         Scene secondScene = new Scene(secondaryLayout, 250, 300);
 
+        open.setOnAction(event -> onOpen());
         newWindow.setTitle("Open Game");
         newWindow.setScene(secondScene);
         newWindow.getIcons().add(new Image("Images/ApplicationImage.PNG"));
-        newWindow.show();
+        newWindow.showAndWait();
 
-        open.setOnAction(event -> onOpen());
     }
 
     private String getFileName() {

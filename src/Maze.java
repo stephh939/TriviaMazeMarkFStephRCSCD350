@@ -16,6 +16,7 @@ import java.util.Optional;
 public class Maze extends GridPane {
 
     private ImageView [][] images;
+    private String [][] wallImages;
     protected int xLoc, yLoc;
     protected String character;
     private ButtonType tnt, fix;
@@ -35,6 +36,7 @@ public class Maze extends GridPane {
         int columnsAmount = width * 2;
         int rowsAmount = height * 2 - 2;
         images = new ImageView[columnsAmount-1][rowsAmount+1];
+        wallImages = new String[columnsAmount-1][rowsAmount+1];
         // add blank spaces
         for (int column = 0; column < columnsAmount; column += 2) {
             for (int rows = 0; rows < columnsAmount; rows += 2) {
@@ -42,6 +44,7 @@ public class Maze extends GridPane {
                 blank.setUserData("room");
                 add(blank, column, rows, 1,1);
                 images[column][rows] = blank;
+                wallImages[column][rows] = "Images/blank.png";
             }
         }
 
@@ -52,6 +55,7 @@ public class Maze extends GridPane {
                 spacer.setUserData("horizLocked");
                 add(spacer, column, rows, 1,1);
                 images[column][rows] = spacer;
+                wallImages[column][rows] = "Images/horiz.png";
             }
         }
 
@@ -62,6 +66,7 @@ public class Maze extends GridPane {
                 spacer.setUserData("vertLocked");
                 add(spacer, column, rows, 1,1);
                 images[column][rows] = spacer;
+                wallImages[column][rows] = "Images/vert.png";
             }
         }
 
@@ -70,6 +75,7 @@ public class Maze extends GridPane {
         xLoc = 0; yLoc = 0;
 
         ImageView exit = images[columnsAmount-2][rowsAmount];
+        wallImages[columnsAmount-2][rowsAmount] = "Images/exit.png";
         exit.setImage(new Image("Images/exit.png"));
     }
 
@@ -82,10 +88,12 @@ public class Maze extends GridPane {
         ImageView lockedDoor = images[x][y];
         if (lockedDoor.getUserData().equals("vertLocked")) {
             lockedDoor.setImage(new Image("Images/sealedVert.jpg"));
+            wallImages[x][y] = "Images/sealedVert.jpg";
             lockedDoor.setUserData("sealed");
         }
         else if (lockedDoor.getUserData().equals("horizLocked")) {
             lockedDoor.setImage(new Image("Images/sealedHoriz.jpg"));
+            wallImages[x][y] = "Images/sealedHoriz.jpg";
             lockedDoor.setUserData("sealed");
         }
         else {
@@ -97,9 +105,11 @@ public class Maze extends GridPane {
         ImageView wall = images[x][y];
         if (wall.getUserData().equals("horizLocked")) {
             wall.setImage(new Image("Images/unlockedHoriz.png"));
+            wallImages[x][y] = "Images/unlockedHoriz.png";
         }
         else if (wall.getUserData().equals("vertLocked")){
             wall.setImage(new Image("Images/unlockedVert.png"));
+            wallImages[x][y] = "Images/unlockedVert.png";
         }
         wall.setUserData("unlocked");
     }
@@ -234,11 +244,64 @@ public class Maze extends GridPane {
     }
 
     protected void checkIfStuck() {
-        // TODO: Check if all the rooms around them are locked
+        if(!this.canMoveUpUpdate() && !this.canMoveDownUpdate() && !this.canMoveLeftUpdate() && !this.canMoveRightUpdate()) {
+            ErrorDialog dialog = new ErrorDialog("You are trapped in the maze!", "You are trapped!", tnt, fix);
+            dialog.showAndWait();
+            System.exit(0);
+        }
     }
 
-    protected void endGame() {
-        // TODO: end the game
+    protected boolean canMoveLeftUpdate() {
+        if (xLoc - 2 > -1) {
+            ImageView wall = images[xLoc - 1][yLoc];
+            if (wall.getUserData().equals("sealed")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean canMoveRightUpdate() {
+        if (xLoc + 2 < images.length) {
+            ImageView wall = images[xLoc + 1][yLoc];
+            if (wall.getUserData().equals("sealed")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean canMoveDownUpdate() {
+        if (yLoc + 2 < images.length) {
+            ImageView wall = images[xLoc][yLoc + 1];
+            if (wall.getUserData().equals("sealed")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean canMoveUpUpdate() {
+        if (yLoc - 2 > -1) {
+            ImageView wall = images[xLoc][yLoc - 1];
+            if (wall.getUserData().equals("sealed")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isGameOver(int x, int y) {
+        if(x == 2 && y == 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void refreshCharacterLocation() {
@@ -248,4 +311,44 @@ public class Maze extends GridPane {
     public void clearCharacter() {
         images[xLoc][yLoc].setImage(new Image("Images/blank.png"));
     }
+
+    public String[][] getUserData() {
+        int columnsAmount = 2 * 2;
+        int rowsAmount = 2 * 2 - 2;
+        String[][] userData = new String[columnsAmount-1][rowsAmount+1];
+
+        for (int x = 0; x < columnsAmount - 1; x++) {
+            for (int y = 0; y < rowsAmount + 1; y++){
+                if(images[x][y] != null) {
+                    userData[x][y] = (String) images[x][y].getUserData();
+                }
+            }
+        }
+
+        return userData;
+    }
+
+    public void setUserData(String[][] userData) {
+        int columnsAmount = 2 * 2;
+        int rowsAmount = 2 * 2 - 2;
+
+        for (int x = 0; x < columnsAmount - 1; x++) {
+            for (int y = 0; y < rowsAmount + 1; y++){
+                if (userData[x][y] != null) {
+                    System.out.println(wallImages[x][y]);
+                    images[x][y].setImage(new Image(wallImages[x][y]));
+                    images[x][y].setUserData(userData[x][y]);
+                }
+            }
+        }
+    }
+
+    public String[][] getWallImages() {
+        return wallImages;
+    }
+
+    public void setWallImages(String[][] wallImages) {
+        this.wallImages = wallImages;
+    }
+
 }

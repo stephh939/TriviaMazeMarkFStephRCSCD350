@@ -10,4 +10,9 @@ public class ErrorDialog extends Alert {
         getDialogPane().getButtonTypes().addAll(tnt, fix);
     }
 
+    public ErrorDialog(String errorMessage, String title, ButtonType tnt, ButtonType fix) {
+        super(AlertType.ERROR, errorMessage);
+        setHeaderText(title);
+        getDialogPane().getButtonTypes().addAll(tnt, fix);
+    }
 }
