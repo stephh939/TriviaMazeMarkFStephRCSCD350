@@ -19,7 +19,6 @@ public class GamesManager implements Serializable {
     private Stage newWindow;
     private String workingDirectoryForGameFiles;
     protected Object[] gameData;
-    //private transient int xloc=0;
 
     public GamesManager() {
         gameFiles = new GamePickerTable();
@@ -28,7 +27,7 @@ public class GamesManager implements Serializable {
         fillTable();
     }
 
-    protected void saveGame(Integer [][] questionsID, int xLoc, int yLoc, String character, String[][] wallsImages, String[][] walls) {
+    protected void saveGame(Integer [][] questionsID, int xLoc, int yLoc, String character, String[][] wallsImages, String[][] walls, boolean[] fixAndTntButtons) {
         File selectedFile = currentFile;
         File newFile;
         if (currentFile == null) {
@@ -53,6 +52,7 @@ public class GamesManager implements Serializable {
                 objectOutputStream.writeObject(character);
                 objectOutputStream.writeObject(wallsImages);
                 objectOutputStream.writeObject(walls);
+                objectOutputStream.writeObject(fixAndTntButtons);
             } catch (Exception ex) {
                 System.out.println("ID10T ERROR: " + ex);
                 return;
@@ -66,7 +66,7 @@ public class GamesManager implements Serializable {
         gameName = workingDirectoryForGameFiles + gameName + ".txt";
 
         File game = new File(gameName);
-        Object[] gameData = new Object[6];
+        Object[] gameData = new Object[7];
         try {
             FileInputStream fileInputStream = new FileInputStream(game);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -76,7 +76,8 @@ public class GamesManager implements Serializable {
             String character = (String) objectInputStream.readObject();
             String [][] wallsImages = (String[][]) objectInputStream.readObject();
             String[][] walls = (String[][]) objectInputStream.readObject();
-            gameData = new Object[]{questionIds, xLoc, yLoc, character, wallsImages, walls};
+            boolean[] fixAndTntButtons = (boolean[]) objectInputStream.readObject();
+            gameData = new Object[]{questionIds, xLoc, yLoc, character, wallsImages, walls, fixAndTntButtons};
         }
         catch(IOException | ClassNotFoundException ex){
             System.out.print("Error: " + ex);
@@ -88,7 +89,6 @@ public class GamesManager implements Serializable {
     }
 
     public void fileChooser() {
-
         Button open = new Button("Open");
         open.setPadding(new Insets(8, 16, 8, 16));
         HBox hBox = new HBox(open);
@@ -105,7 +105,6 @@ public class GamesManager implements Serializable {
         newWindow.setScene(secondScene);
         newWindow.getIcons().add(new Image("Images/ApplicationImage.PNG"));
         newWindow.showAndWait();
-
     }
 
     private String getFileName() {

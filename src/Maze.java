@@ -21,20 +21,22 @@ public class Maze extends GridPane {
     protected String character;
     private ButtonType tnt, fix;
     private boolean tntIsUsed, fixIsUsed;
+    protected int xDimension, yDimension;
 
-    protected Maze(int width, int height) {
+    protected Maze(int xDim, int yDim) {
         tnt = new ButtonType("TNT");
         fix = new ButtonType("Fix");
-
         character = "Android";
-        createBoard(width, height);
+        createBoard(xDim, yDim);
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-    protected void createBoard(int width, int height) {
-        int columnsAmount = width * 2;
-        int rowsAmount = height * 2 - 2;
+    protected void createBoard(int xDim, int yDim) {
+        tntIsUsed = false; fixIsUsed = false;
+        xDimension = xDim; yDimension = yDim;
+        int columnsAmount = xDimension * 2;
+        int rowsAmount = yDimension * 2 - 2;
         images = new ImageView[columnsAmount-1][rowsAmount+1];
         wallImages = new String[columnsAmount-1][rowsAmount+1];
         // add blank spaces
@@ -205,9 +207,99 @@ public class Maze extends GridPane {
 
     private void handleButtonClick(Optional<ButtonType> result) {
         if (result.get() == tnt){
-            //TODO: Set door to unlocked
-        } else if (result.get() == fix) {
-            // TODO: Give the user a second chance
+            if(this.tntIsUsed == false) {
+                for(int x = 0; x < 1; x++){
+                    ImageView wall;
+
+                    for(; xLoc - 2 > -1 && !canMoveLeftUpdate(); ) {					//unlock 'left' door
+                        wall = images[xLoc-1][yLoc];
+                        if(wall.getUserData().equals("sealed")) {
+                            wall.setImage(new Image("Images/unlockedVert.png"));
+                            wall.setUserData("unlocked");
+                        }
+
+                    }
+                    for(;xLoc + 2 < images.length && !canMoveRightUpdate() ; ) {		//unlock 'right' door
+                        wall = images[xLoc+1][yLoc];
+                        if(wall.getUserData().equals("sealed")) {
+                            wall.setImage(new Image("Images/unlockedVert.png"));
+                            wall.setUserData("unlocked");
+                        }
+                    }
+
+                    for(; yLoc - 2 > -1 && !canMoveUpUpdate(); ) {						//unlock 'up' door
+                        wall = images[xLoc][yLoc-1];
+                        if(wall.getUserData().equals("sealed")) {
+                            wall.setImage(new Image("Images/unlockedHoriz.png"));
+                            wall.setUserData("unlocked");
+                        }
+                    }
+
+                    for(; yLoc + 2 < images.length && !canMoveDownUpdate(); ) { 		//unlock 'down' door
+                        wall = images[xLoc][yLoc+1];
+                        if(wall.getUserData().equals("sealed")) {
+                            wall.setImage(new Image("Images/unlockedHoriz.png"));
+                            wall.setUserData("unlocked");
+                        }
+                    }
+
+                }
+
+            }
+
+            if (this.tntIsUsed == true){
+                ErrorDialog ed = new ErrorDialog("You can only use the TNT button once.", tnt, fix);
+                ed.showAndWait();
+            }
+
+            this.tntIsUsed =true;
+            return;
+        }
+
+        if (result.get() == fix) {
+            if(!fixIsUsed){
+                ImageView wall;
+
+                if(xLoc - 2 > -1 && !canMoveLeftUpdate()) {					//reset 'left' door
+                    wall = images[xLoc-1][yLoc];
+                    if(wall.getUserData().equals("sealed")) {
+                        wall.setImage(new Image("Images/vert.png"));
+                        wall.setUserData("vertLocked");
+                        fixIsUsed = true;
+                        return;
+                    }
+
+                }
+                if(xLoc + 2 < images.length && !canMoveRightUpdate()) {		//reset 'right' door
+                    wall = images[xLoc+1][yLoc];
+                    if(wall.getUserData().equals("sealed")) {
+                        wall.setImage(new Image("Images/vert.png"));
+                        wall.setUserData("vertLocked");
+                        fixIsUsed = true;
+                        return;
+                    }
+                }
+
+                if( yLoc - 2 > -1 && !canMoveUpUpdate() ) {					//reset 'up' door
+                    wall = images[xLoc][yLoc-1];
+                    if(wall.getUserData().equals("sealed")) {
+                        wall.setImage(new Image("Images/horiz.png"));
+                        wall.setUserData("horizLocked");
+                        fixIsUsed = true;
+                        return;
+                    }
+                }
+
+                if(yLoc + 2 < images.length && !canMoveDownUpdate()) {		 //reset 'down' door
+                    wall = images[xLoc][yLoc+1];
+                    if(wall.getUserData().equals("sealed")) {
+                        wall.setImage(new Image("Images/horiz.png"));
+                        wall.setUserData("horizLocked");
+                        fixIsUsed = true;
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -313,8 +405,8 @@ public class Maze extends GridPane {
     }
 
     public String[][] getUserData() {
-        int columnsAmount = 2 * 2;
-        int rowsAmount = 2 * 2 - 2;
+        int columnsAmount = xDimension * 2;
+        int rowsAmount = yDimension * 2 - 2;
         String[][] userData = new String[columnsAmount-1][rowsAmount+1];
 
         for (int x = 0; x < columnsAmount - 1; x++) {
@@ -329,8 +421,8 @@ public class Maze extends GridPane {
     }
 
     public void setUserData(String[][] userData) {
-        int columnsAmount = 2 * 2;
-        int rowsAmount = 2 * 2 - 2;
+        int columnsAmount = xDimension * 2;
+        int rowsAmount = yDimension * 2 - 2;
 
         for (int x = 0; x < columnsAmount - 1; x++) {
             for (int y = 0; y < rowsAmount + 1; y++){
@@ -351,4 +443,12 @@ public class Maze extends GridPane {
         this.wallImages = wallImages;
     }
 
+    public void setButtons(boolean[] buttons) {
+        tntIsUsed = buttons[0];
+        fixIsUsed = buttons[1];
+    }
+
+    public boolean[] getButtons() {
+        return new boolean[]{tntIsUsed, fixIsUsed};
+    }
 }

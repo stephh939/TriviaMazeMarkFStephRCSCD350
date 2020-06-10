@@ -12,7 +12,7 @@ public class InputDialog extends TextInputDialog {
 
     public String getAnswer() {
         Optional<String> answer = showAndWait();
-        return answer.get();
+        return answer.get().trim().toLowerCase();
     }
 
 }

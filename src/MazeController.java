@@ -8,6 +8,11 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+// Extra Credit: Sounds are played in these circumstances
+// 1. When the user gets the answer correct
+// 2. When the user gets the answer wrong
+// 3. When the user uses the TNT or Fix life lines
+
 public class MazeController {
 
     private MazeView view;
@@ -58,6 +63,7 @@ public class MazeController {
         view.getMaze().character = (String) gameData[3];
         view.getMaze().setWallImages((String[][]) gameData[4]);
         view.getMaze().setUserData((String[][]) gameData[5]);
+        view.getMaze().setButtons((boolean[]) gameData[6]);
         view.getMaze().refreshCharacterLocation();
     }
 
@@ -68,7 +74,8 @@ public class MazeController {
         String character = view.getMaze().character;
         String [][] wallsImages = view.getMaze().getWallImages();
         String[][] walls = view.getMaze().getUserData();
-        gamesManager.saveGame(questionsIds, xLoc, yLoc, character, wallsImages, walls);
+        boolean[] fixAndTntButtons = view.getMaze().getButtons();
+        gamesManager.saveGame(questionsIds, xLoc, yLoc, character, wallsImages, walls, fixAndTntButtons);
     }
 
     private void onNew() {
@@ -111,7 +118,7 @@ public class MazeController {
                             AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc, maze.yLoc - 1);
-                            if(maze.isGameOver(maze.xLoc, maze.yLoc-2)) {
+                            if(maze.isGameOver(maze.xLoc, maze.yLoc)) {
                                 endGame();
                                 break;
                             }
@@ -126,6 +133,7 @@ public class MazeController {
                     view.getMaze().moveUp(correctAnswer);
 
                 }
+
                 break;
 
             case DOWN :
@@ -138,8 +146,9 @@ public class MazeController {
                         if (isCorrect) {
                             AudioPlayer.playCorrectSound();
                             correctAnswer = true;
+
                             maze.setWallToUnlocked(maze.xLoc, maze.yLoc + 1);
-                            if(maze.isGameOver(maze.xLoc, maze.yLoc+2)) {
+                            if(maze.isGameOver(maze.xLoc, maze.yLoc)) {
                                 endGame();
                                 break;
                             }
@@ -151,8 +160,15 @@ public class MazeController {
                         }
                     }
                     maze.checkIfStuck();
+
                     view.getMaze().moveDown(correctAnswer);
                 }
+
+                if(maze.isGameOver(maze.xLoc, maze.yLoc)) {
+                    endGame();
+                    break;
+                }
+
                 break;
 
             case RIGHT :
@@ -166,20 +182,24 @@ public class MazeController {
                             AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc + 1, maze.yLoc);
-                            if(maze.isGameOver(maze.xLoc +2, maze.yLoc)) {
-                                endGame();
-                                break;
-                            }
+
                         }
                         else {
                             AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc + 1, maze.yLoc);
                             correctAnswer = false;
                         }
+
                     }
                     maze.checkIfStuck();
+
                     view.getMaze().moveRight(correctAnswer);
                 }
+                if(maze.isGameOver(maze.xLoc, maze.yLoc)) {
+                    endGame();
+                    break;
+                }
+
                 break;
 
             case LEFT :
@@ -193,22 +213,26 @@ public class MazeController {
                             AudioPlayer.playCorrectSound();
                             correctAnswer = true;
                             maze.setWallToUnlocked(maze.xLoc - 2, maze.yLoc);
-                            if(maze.isGameOver(maze.xLoc - 2, maze.yLoc)) {
-                                endGame();
-                                break;
-                            }
                         }
                         else {
                             AudioPlayer.playWrongSound();
                             maze.sealDoor(maze.xLoc - 1, maze.yLoc);
                             correctAnswer = false;
                         }
+
                     }
                     maze.checkIfStuck();
+
                     view.getMaze().moveLeft(correctAnswer);
                 }
+                if(maze.isGameOver(maze.xLoc, maze.yLoc)) {
+                    endGame();
+                    break;
+                }
+
                 break;
         }
+
     }
 
     protected void endGame() {
